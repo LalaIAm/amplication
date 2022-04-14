@@ -13,6 +13,18 @@ import { HouseholdList } from "./household/HouseholdList";
 import { HouseholdCreate } from "./household/HouseholdCreate";
 import { HouseholdEdit } from "./household/HouseholdEdit";
 import { HouseholdShow } from "./household/HouseholdShow";
+import { HouseholdCalendarList } from "./householdCalendar/HouseholdCalendarList";
+import { HouseholdCalendarCreate } from "./householdCalendar/HouseholdCalendarCreate";
+import { HouseholdCalendarEdit } from "./householdCalendar/HouseholdCalendarEdit";
+import { HouseholdCalendarShow } from "./householdCalendar/HouseholdCalendarShow";
+import { EventList } from "./event/EventList";
+import { EventCreate } from "./event/EventCreate";
+import { EventEdit } from "./event/EventEdit";
+import { EventShow } from "./event/EventShow";
+import { LocationList } from "./location/LocationList";
+import { LocationCreate } from "./location/LocationCreate";
+import { LocationEdit } from "./location/LocationEdit";
+import { LocationShow } from "./location/LocationShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -52,6 +64,27 @@ const App = (): React.ReactElement => {
           edit={HouseholdEdit}
           create={HouseholdCreate}
           show={HouseholdShow}
+        />
+        <Resource
+          name="HouseholdCalendar"
+          list={HouseholdCalendarList}
+          edit={HouseholdCalendarEdit}
+          create={HouseholdCalendarCreate}
+          show={HouseholdCalendarShow}
+        />
+        <Resource
+          name="Event"
+          list={EventList}
+          edit={EventEdit}
+          create={EventCreate}
+          show={EventShow}
+        />
+        <Resource
+          name="Location"
+          list={LocationList}
+          edit={LocationEdit}
+          create={LocationCreate}
+          show={LocationShow}
         />
       </Admin>
     </div>

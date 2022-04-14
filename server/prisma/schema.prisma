@@ -11,6 +11,7 @@ model User {
   avatar      String?
   bio         String?
   createdAt   DateTime   @default(now())
+  event       Event[]
   firstName   String?
   household   Household? @relation(fields: [householdId], references: [id])
   householdId String?
@@ -23,9 +24,42 @@ model User {
 }
 
 model Household {
+  createdAt          DateTime            @default(now())
+  householdCalendars HouseholdCalendar[]
+  id                 String              @id @default(cuid())
+  members            User[]
+  name               String
+  updatedAt          DateTime            @updatedAt
+}
+
+model HouseholdCalendar {
+  createdAt   DateTime   @default(now())
+  events      Event[]
+  household   Household? @relation(fields: [householdId], references: [id])
+  householdId String?
+  id          String     @id @default(cuid())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Event {
+  attending           User[]
+  createdAt           DateTime           @default(now())
+  date                DateTime
+  description         String?
+  householdCalendar   HouseholdCalendar? @relation(fields: [householdCalendarId], references: [id])
+  householdCalendarId String?
+  id                  String             @id @default(cuid())
+  location            Location?          @relation(fields: [locationId], references: [id])
+  locationId          String?
+  time                DateTime?
+  title               String
+  updatedAt           DateTime           @updatedAt
+}
+
+model Location {
   createdAt DateTime @default(now())
+  events    Event[]
   id        String   @id @default(cuid())
-  members   User[]
   name      String
   updatedAt DateTime @updatedAt
 }

@@ -11,12 +11,25 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { StringFilter } from "../../util/StringFilter";
+import { HouseholdCalendarListRelationFilter } from "../../householdCalendar/base/HouseholdCalendarListRelationFilter";
+import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { IsOptional, ValidateNested } from "class-validator";
+import { StringFilter } from "../../util/StringFilter";
 import { UserListRelationFilter } from "../../user/base/UserListRelationFilter";
 @InputType()
 class HouseholdWhereInput {
+  @ApiProperty({
+    required: false,
+    type: () => HouseholdCalendarListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => HouseholdCalendarListRelationFilter)
+  @IsOptional()
+  @Field(() => HouseholdCalendarListRelationFilter, {
+    nullable: true,
+  })
+  householdCalendars?: HouseholdCalendarListRelationFilter;
+
   @ApiProperty({
     required: false,
     type: StringFilter,

@@ -25,6 +25,8 @@ import { DeleteHouseholdArgs } from "./DeleteHouseholdArgs";
 import { HouseholdFindManyArgs } from "./HouseholdFindManyArgs";
 import { HouseholdFindUniqueArgs } from "./HouseholdFindUniqueArgs";
 import { Household } from "./Household";
+import { HouseholdCalendarFindManyArgs } from "../../householdCalendar/base/HouseholdCalendarFindManyArgs";
+import { HouseholdCalendar } from "../../householdCalendar/base/HouseholdCalendar";
 import { UserFindManyArgs } from "../../user/base/UserFindManyArgs";
 import { User } from "../../user/base/User";
 import { HouseholdService } from "../household.service";
@@ -204,6 +206,32 @@ export class HouseholdResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => [HouseholdCalendar])
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "read",
+    possession: "any",
+  })
+  async householdCalendars(
+    @graphql.Parent() parent: Household,
+    @graphql.Args() args: HouseholdCalendarFindManyArgs,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<HouseholdCalendar[]> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "HouseholdCalendar",
+    });
+    const results = await this.service.findHouseholdCalendars(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results.map((result) => permission.filter(result));
   }
 
   @graphql.ResolveField(() => [User])

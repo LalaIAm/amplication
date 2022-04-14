@@ -11,11 +11,24 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { UserCreateNestedManyWithoutHouseholdsInput } from "./UserCreateNestedManyWithoutHouseholdsInput";
+import { HouseholdCalendarCreateNestedManyWithoutHouseholdsInput } from "./HouseholdCalendarCreateNestedManyWithoutHouseholdsInput";
 import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { UserCreateNestedManyWithoutHouseholdsInput } from "./UserCreateNestedManyWithoutHouseholdsInput";
 @InputType()
 class HouseholdCreateInput {
+  @ApiProperty({
+    required: false,
+    type: () => HouseholdCalendarCreateNestedManyWithoutHouseholdsInput,
+  })
+  @ValidateNested()
+  @Type(() => HouseholdCalendarCreateNestedManyWithoutHouseholdsInput)
+  @IsOptional()
+  @Field(() => HouseholdCalendarCreateNestedManyWithoutHouseholdsInput, {
+    nullable: true,
+  })
+  householdCalendars?: HouseholdCalendarCreateNestedManyWithoutHouseholdsInput;
+
   @ApiProperty({
     required: false,
     type: () => UserCreateNestedManyWithoutHouseholdsInput,

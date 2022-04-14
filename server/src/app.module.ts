@@ -1,6 +1,9 @@
 import { Module } from "@nestjs/common";
 import { UserModule } from "./user/user.module";
 import { HouseholdModule } from "./household/household.module";
+import { HouseholdCalendarModule } from "./householdCalendar/householdCalendar.module";
+import { EventModule } from "./event/event.module";
+import { LocationModule } from "./location/location.module";
 import { ACLModule } from "./auth/acl.module";
 import { AuthModule } from "./auth/auth.module";
 import { HealthModule } from "./health/health.module";
@@ -16,6 +19,9 @@ import { GraphQLModule } from "@nestjs/graphql";
   imports: [
     UserModule,
     HouseholdModule,
+    HouseholdCalendarModule,
+    EventModule,
+    LocationModule,
     ACLModule,
     AuthModule,
     HealthModule,

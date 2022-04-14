@@ -27,6 +27,9 @@ import { HouseholdWhereUniqueInput } from "./HouseholdWhereUniqueInput";
 import { HouseholdFindManyArgs } from "./HouseholdFindManyArgs";
 import { HouseholdUpdateInput } from "./HouseholdUpdateInput";
 import { Household } from "./Household";
+import { HouseholdCalendarFindManyArgs } from "../../householdCalendar/base/HouseholdCalendarFindManyArgs";
+import { HouseholdCalendar } from "../../householdCalendar/base/HouseholdCalendar";
+import { HouseholdCalendarWhereUniqueInput } from "../../householdCalendar/base/HouseholdCalendarWhereUniqueInput";
 import { UserFindManyArgs } from "../../user/base/UserFindManyArgs";
 import { User } from "../../user/base/User";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
@@ -256,6 +259,188 @@ export class HouseholdControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Get("/:id/householdCalendars")
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "read",
+    possession: "any",
+  })
+  @ApiNestedQuery(HouseholdCalendarFindManyArgs)
+  async findManyHouseholdCalendars(
+    @common.Req() request: Request,
+    @common.Param() params: HouseholdWhereUniqueInput,
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<HouseholdCalendar[]> {
+    const query = plainToClass(HouseholdCalendarFindManyArgs, request.query);
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "HouseholdCalendar",
+    });
+    const results = await this.service.findHouseholdCalendars(params.id, {
+      ...query,
+      select: {
+        createdAt: true,
+
+        household: {
+          select: {
+            id: true,
+          },
+        },
+
+        id: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results.map((result) => permission.filter(result));
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Post("/:id/householdCalendars")
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "update",
+    possession: "any",
+  })
+  async createHouseholdCalendars(
+    @common.Param() params: HouseholdWhereUniqueInput,
+    @common.Body() body: HouseholdWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      householdCalendars: {
+        connect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "Household",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"Household"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Patch("/:id/householdCalendars")
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "update",
+    possession: "any",
+  })
+  async updateHouseholdCalendars(
+    @common.Param() params: HouseholdWhereUniqueInput,
+    @common.Body() body: HouseholdCalendarWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      householdCalendars: {
+        set: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "Household",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"Household"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Delete("/:id/householdCalendars")
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "update",
+    possession: "any",
+  })
+  async deleteHouseholdCalendars(
+    @common.Param() params: HouseholdWhereUniqueInput,
+    @common.Body() body: HouseholdWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      householdCalendars: {
+        disconnect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "Household",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"Household"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 
   @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
