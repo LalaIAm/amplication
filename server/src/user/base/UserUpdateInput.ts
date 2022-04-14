@@ -15,6 +15,10 @@ import { IsString, IsOptional, ValidateNested } from "class-validator";
 import { EventUpdateManyWithoutUsersInput } from "./EventUpdateManyWithoutUsersInput";
 import { Type } from "class-transformer";
 import { HouseholdWhereUniqueInput } from "../../household/base/HouseholdWhereUniqueInput";
+import { ItemUpdateManyWithoutUsersInput } from "./ItemUpdateManyWithoutUsersInput";
+import { ListUpdateManyWithoutUsersInput } from "./ListUpdateManyWithoutUsersInput";
+import { NoteUpdateManyWithoutUsersInput } from "./NoteUpdateManyWithoutUsersInput";
+import { PostUpdateManyWithoutUsersInput } from "./PostUpdateManyWithoutUsersInput";
 @InputType()
 class UserUpdateInput {
   @ApiProperty({
@@ -76,6 +80,18 @@ class UserUpdateInput {
 
   @ApiProperty({
     required: false,
+    type: () => ItemUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => ItemUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => ItemUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  items?: ItemUpdateManyWithoutUsersInput;
+
+  @ApiProperty({
+    required: false,
     type: String,
   })
   @IsString()
@@ -87,6 +103,30 @@ class UserUpdateInput {
 
   @ApiProperty({
     required: false,
+    type: () => ListUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => ListUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => ListUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  lists?: ListUpdateManyWithoutUsersInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => NoteUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => NoteUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => NoteUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  notes?: NoteUpdateManyWithoutUsersInput;
+
+  @ApiProperty({
+    required: false,
     type: String,
   })
   @IsString()
@@ -95,6 +135,18 @@ class UserUpdateInput {
     nullable: true,
   })
   password?: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => PostUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => PostUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => PostUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  posts?: PostUpdateManyWithoutUsersInput;
 
   @ApiProperty({
     required: false,

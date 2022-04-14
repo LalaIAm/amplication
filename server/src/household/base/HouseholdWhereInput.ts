@@ -11,13 +11,26 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { HouseholdCalendarListRelationFilter } from "../../householdCalendar/base/HouseholdCalendarListRelationFilter";
+import { ForumListRelationFilter } from "../../forum/base/ForumListRelationFilter";
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
+import { HouseholdCalendarListRelationFilter } from "../../householdCalendar/base/HouseholdCalendarListRelationFilter";
 import { StringFilter } from "../../util/StringFilter";
 import { UserListRelationFilter } from "../../user/base/UserListRelationFilter";
 @InputType()
 class HouseholdWhereInput {
+  @ApiProperty({
+    required: false,
+    type: () => ForumListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => ForumListRelationFilter)
+  @IsOptional()
+  @Field(() => ForumListRelationFilter, {
+    nullable: true,
+  })
+  forums?: ForumListRelationFilter;
+
   @ApiProperty({
     required: false,
     type: () => HouseholdCalendarListRelationFilter,

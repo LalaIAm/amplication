@@ -27,6 +27,7 @@ import { HouseholdCalendarWhereUniqueInput } from "./HouseholdCalendarWhereUniqu
 import { HouseholdCalendarFindManyArgs } from "./HouseholdCalendarFindManyArgs";
 import { HouseholdCalendarUpdateInput } from "./HouseholdCalendarUpdateInput";
 import { HouseholdCalendar } from "./HouseholdCalendar";
+import { Post } from "../../post/base/Post";
 import { EventFindManyArgs } from "../../event/base/EventFindManyArgs";
 import { Event } from "../../event/base/Event";
 import { EventWhereUniqueInput } from "../../event/base/EventWhereUniqueInput";

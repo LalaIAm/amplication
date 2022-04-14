@@ -16,8 +16,12 @@ model User {
   household   Household? @relation(fields: [householdId], references: [id])
   householdId String?
   id          String     @id @default(cuid())
+  items       Item[]
   lastName    String?
+  lists       List[]
+  notes       Note[]
   password    String
+  posts       Post[]
   roles       String[]
   updatedAt   DateTime   @updatedAt
   username    String     @unique
@@ -25,6 +29,7 @@ model User {
 
 model Household {
   createdAt          DateTime            @default(now())
+  forums             Forum[]
   householdCalendars HouseholdCalendar[]
   id                 String              @id @default(cuid())
   members            User[]
@@ -61,5 +66,60 @@ model Location {
   events    Event[]
   id        String   @id @default(cuid())
   name      String
+  updatedAt DateTime @updatedAt
+}
+
+model List {
+  createdAt   DateTime @default(now())
+  id          String   @id @default(cuid())
+  isHousehold Boolean?
+  items       Item[]
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  title       String
+  updatedAt   DateTime @updatedAt
+}
+
+model Item {
+  assignedTo User[]
+  completed  Boolean?
+  createdAt  DateTime  @default(now())
+  details    String?
+  due        DateTime?
+  id         String    @id @default(cuid())
+  list       List?     @relation(fields: [listId], references: [id])
+  listId     String?
+  title      String?
+  updatedAt  DateTime  @updatedAt
+}
+
+model Note {
+  createdAt DateTime @default(now())
+  household Boolean?
+  id        String   @id @default(cuid())
+  owner     User?    @relation(fields: [ownerId], references: [id])
+  ownerId   String?
+  text      String?
+  updatedAt DateTime @updatedAt
+}
+
+model Forum {
+  createdAt   DateTime   @default(now())
+  household   Household? @relation(fields: [householdId], references: [id])
+  householdId String?
+  id          String     @id @default(cuid())
+  posts       Post[]
+  topic       String
+  updatedAt   DateTime   @updatedAt
+}
+
+model Post {
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  String?
+  createdAt DateTime @default(now())
+  forum     Forum?   @relation(fields: [forumId], references: [id])
+  forumId   String?
+  id        String   @id @default(cuid())
+  text      String
   updatedAt DateTime @updatedAt
 }

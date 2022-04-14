@@ -22,6 +22,25 @@ export const HouseholdShow = (props: ShowProps): React.ReactElement => {
         <TextField label="Name" source="name" />
         <DateField source="updatedAt" label="Updated At" />
         <ReferenceManyField
+          reference="Forum"
+          target="HouseholdId"
+          label="Forums"
+        >
+          <Datagrid rowClick="show">
+            <DateField source="createdAt" label="Created At" />
+            <ReferenceField
+              label="Household"
+              source="household.id"
+              reference="Household"
+            >
+              <TextField source={HOUSEHOLD_TITLE_FIELD} />
+            </ReferenceField>
+            <TextField label="ID" source="id" />
+            <TextField label="Topic" source="topic" />
+            <DateField source="updatedAt" label="Updated At" />
+          </Datagrid>
+        </ReferenceManyField>
+        <ReferenceManyField
           reference="HouseholdCalendar"
           target="HouseholdId"
           label="Household Calendars"

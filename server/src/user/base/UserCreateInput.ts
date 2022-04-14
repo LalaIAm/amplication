@@ -15,6 +15,10 @@ import { IsString, IsOptional, ValidateNested } from "class-validator";
 import { EventCreateNestedManyWithoutUsersInput } from "./EventCreateNestedManyWithoutUsersInput";
 import { Type } from "class-transformer";
 import { HouseholdWhereUniqueInput } from "../../household/base/HouseholdWhereUniqueInput";
+import { ItemCreateNestedManyWithoutUsersInput } from "./ItemCreateNestedManyWithoutUsersInput";
+import { ListCreateNestedManyWithoutUsersInput } from "./ListCreateNestedManyWithoutUsersInput";
+import { NoteCreateNestedManyWithoutUsersInput } from "./NoteCreateNestedManyWithoutUsersInput";
+import { PostCreateNestedManyWithoutUsersInput } from "./PostCreateNestedManyWithoutUsersInput";
 @InputType()
 class UserCreateInput {
   @ApiProperty({
@@ -76,6 +80,18 @@ class UserCreateInput {
 
   @ApiProperty({
     required: false,
+    type: () => ItemCreateNestedManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => ItemCreateNestedManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => ItemCreateNestedManyWithoutUsersInput, {
+    nullable: true,
+  })
+  items?: ItemCreateNestedManyWithoutUsersInput;
+
+  @ApiProperty({
+    required: false,
     type: String,
   })
   @IsString()
@@ -86,12 +102,48 @@ class UserCreateInput {
   lastName?: string | null;
 
   @ApiProperty({
+    required: false,
+    type: () => ListCreateNestedManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => ListCreateNestedManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => ListCreateNestedManyWithoutUsersInput, {
+    nullable: true,
+  })
+  lists?: ListCreateNestedManyWithoutUsersInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => NoteCreateNestedManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => NoteCreateNestedManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => NoteCreateNestedManyWithoutUsersInput, {
+    nullable: true,
+  })
+  notes?: NoteCreateNestedManyWithoutUsersInput;
+
+  @ApiProperty({
     required: true,
     type: String,
   })
   @IsString()
   @Field(() => String)
   password!: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => PostCreateNestedManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => PostCreateNestedManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => PostCreateNestedManyWithoutUsersInput, {
+    nullable: true,
+  })
+  posts?: PostCreateNestedManyWithoutUsersInput;
 
   @ApiProperty({
     required: true,

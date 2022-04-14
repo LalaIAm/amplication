@@ -4,6 +4,11 @@ import { HouseholdModule } from "./household/household.module";
 import { HouseholdCalendarModule } from "./householdCalendar/householdCalendar.module";
 import { EventModule } from "./event/event.module";
 import { LocationModule } from "./location/location.module";
+import { ListModule } from "./list/list.module";
+import { ItemModule } from "./item/item.module";
+import { NoteModule } from "./note/note.module";
+import { ForumModule } from "./forum/forum.module";
+import { PostModule } from "./post/post.module";
 import { ACLModule } from "./auth/acl.module";
 import { AuthModule } from "./auth/auth.module";
 import { HealthModule } from "./health/health.module";
@@ -22,6 +27,11 @@ import { GraphQLModule } from "@nestjs/graphql";
     HouseholdCalendarModule,
     EventModule,
     LocationModule,
+    ListModule,
+    ItemModule,
+    NoteModule,
+    ForumModule,
+    PostModule,
     ACLModule,
     AuthModule,
     HealthModule,

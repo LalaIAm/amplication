@@ -27,6 +27,7 @@ import { EventWhereUniqueInput } from "./EventWhereUniqueInput";
 import { EventFindManyArgs } from "./EventFindManyArgs";
 import { EventUpdateInput } from "./EventUpdateInput";
 import { Event } from "./Event";
+import { Post } from "../../post/base/Post";
 import { UserFindManyArgs } from "../../user/base/UserFindManyArgs";
 import { User } from "../../user/base/User";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";

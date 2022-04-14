@@ -10,7 +10,16 @@ https://docs.amplication.com/docs/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "nestjs-prisma";
-import { Prisma, User, Event, Household } from "@prisma/client";
+import {
+  Prisma,
+  User,
+  Event,
+  Item,
+  List,
+  Note,
+  Post,
+  Household,
+} from "@prisma/client";
 import { PasswordService } from "../../auth/password.service";
 import { transformStringFieldUpdateInput } from "../../prisma.util";
 
@@ -81,6 +90,50 @@ export class UserServiceBase {
         where: { id: parentId },
       })
       .event(args);
+  }
+
+  async findItems(
+    parentId: string,
+    args: Prisma.ItemFindManyArgs
+  ): Promise<Item[]> {
+    return this.prisma.user
+      .findUnique({
+        where: { id: parentId },
+      })
+      .items(args);
+  }
+
+  async findLists(
+    parentId: string,
+    args: Prisma.ListFindManyArgs
+  ): Promise<List[]> {
+    return this.prisma.user
+      .findUnique({
+        where: { id: parentId },
+      })
+      .lists(args);
+  }
+
+  async findNotes(
+    parentId: string,
+    args: Prisma.NoteFindManyArgs
+  ): Promise<Note[]> {
+    return this.prisma.user
+      .findUnique({
+        where: { id: parentId },
+      })
+      .notes(args);
+  }
+
+  async findPosts(
+    parentId: string,
+    args: Prisma.PostFindManyArgs
+  ): Promise<Post[]> {
+    return this.prisma.user
+      .findUnique({
+        where: { id: parentId },
+      })
+      .posts(args);
   }
 
   async getHousehold(parentId: string): Promise<Household | null> {
