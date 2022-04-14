@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "react-admin";
 
+import { ForumTitle } from "../forum/ForumTitle";
 import { HouseholdCalendarTitle } from "../householdCalendar/HouseholdCalendarTitle";
 import { UserTitle } from "../user/UserTitle";
 
@@ -16,6 +17,14 @@ export const HouseholdCreate = (props: CreateProps): React.ReactElement => {
   return (
     <Create {...props}>
       <SimpleForm>
+        <ReferenceArrayInput
+          source="forums"
+          reference="Forum"
+          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+          format={(value: any) => value && value.map((v: any) => v.id)}
+        >
+          <SelectArrayInput optionText={ForumTitle} />
+        </ReferenceArrayInput>
         <ReferenceArrayInput
           source="householdCalendars"
           reference="HouseholdCalendar"

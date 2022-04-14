@@ -15,6 +15,10 @@ import { IsString, IsOptional, IsDate, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { Event } from "../../event/base/Event";
 import { Household } from "../../household/base/Household";
+import { Item } from "../../item/base/Item";
+import { List } from "../../list/base/List";
+import { Note } from "../../note/base/Note";
+import { Post } from "../../post/base/Post";
 @ObjectType()
 class User {
   @ApiProperty({
@@ -86,6 +90,15 @@ class User {
 
   @ApiProperty({
     required: false,
+    type: () => [Item],
+  })
+  @ValidateNested()
+  @Type(() => Item)
+  @IsOptional()
+  items?: Array<Item>;
+
+  @ApiProperty({
+    required: false,
     type: String,
   })
   @IsString()
@@ -94,6 +107,33 @@ class User {
     nullable: true,
   })
   lastName!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => [List],
+  })
+  @ValidateNested()
+  @Type(() => List)
+  @IsOptional()
+  lists?: Array<List>;
+
+  @ApiProperty({
+    required: false,
+    type: () => [Note],
+  })
+  @ValidateNested()
+  @Type(() => Note)
+  @IsOptional()
+  notes?: Array<Note>;
+
+  @ApiProperty({
+    required: false,
+    type: () => [Post],
+  })
+  @ValidateNested()
+  @Type(() => Post)
+  @IsOptional()
+  posts?: Array<Post>;
 
   @ApiProperty({
     required: true,

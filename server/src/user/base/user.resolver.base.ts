@@ -27,6 +27,14 @@ import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
 import { User } from "./User";
 import { EventFindManyArgs } from "../../event/base/EventFindManyArgs";
 import { Event } from "../../event/base/Event";
+import { ItemFindManyArgs } from "../../item/base/ItemFindManyArgs";
+import { Item } from "../../item/base/Item";
+import { ListFindManyArgs } from "../../list/base/ListFindManyArgs";
+import { List } from "../../list/base/List";
+import { NoteFindManyArgs } from "../../note/base/NoteFindManyArgs";
+import { Note } from "../../note/base/Note";
+import { PostFindManyArgs } from "../../post/base/PostFindManyArgs";
+import { Post } from "../../post/base/Post";
 import { Household } from "../../household/base/Household";
 import { UserService } from "../user.service";
 
@@ -239,6 +247,110 @@ export class UserResolverBase {
       resource: "Event",
     });
     const results = await this.service.findEvent(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results.map((result) => permission.filter(result));
+  }
+
+  @graphql.ResolveField(() => [Item])
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
+  async items(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: ItemFindManyArgs,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<Item[]> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Item",
+    });
+    const results = await this.service.findItems(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results.map((result) => permission.filter(result));
+  }
+
+  @graphql.ResolveField(() => [List])
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
+  async lists(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: ListFindManyArgs,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<List[]> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "List",
+    });
+    const results = await this.service.findLists(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results.map((result) => permission.filter(result));
+  }
+
+  @graphql.ResolveField(() => [Note])
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
+  async notes(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: NoteFindManyArgs,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<Note[]> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Note",
+    });
+    const results = await this.service.findNotes(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results.map((result) => permission.filter(result));
+  }
+
+  @graphql.ResolveField(() => [Post])
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
+  async posts(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: PostFindManyArgs,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<Post[]> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Post",
+    });
+    const results = await this.service.findPosts(parent.id, args);
 
     if (!results) {
       return [];

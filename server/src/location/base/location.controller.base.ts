@@ -27,6 +27,7 @@ import { LocationWhereUniqueInput } from "./LocationWhereUniqueInput";
 import { LocationFindManyArgs } from "./LocationFindManyArgs";
 import { LocationUpdateInput } from "./LocationUpdateInput";
 import { Location } from "./Location";
+import { Post } from "../../post/base/Post";
 import { EventFindManyArgs } from "../../event/base/EventFindManyArgs";
 import { Event } from "../../event/base/Event";
 import { EventWhereUniqueInput } from "../../event/base/EventWhereUniqueInput";

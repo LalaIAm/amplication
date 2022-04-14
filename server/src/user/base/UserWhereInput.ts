@@ -17,6 +17,10 @@ import { Type } from "class-transformer";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { HouseholdWhereUniqueInput } from "../../household/base/HouseholdWhereUniqueInput";
 import { StringFilter } from "../../util/StringFilter";
+import { ItemListRelationFilter } from "../../item/base/ItemListRelationFilter";
+import { ListListRelationFilter } from "../../list/base/ListListRelationFilter";
+import { NoteListRelationFilter } from "../../note/base/NoteListRelationFilter";
+import { PostListRelationFilter } from "../../post/base/PostListRelationFilter";
 @InputType()
 class UserWhereInput {
   @ApiProperty({
@@ -67,6 +71,18 @@ class UserWhereInput {
 
   @ApiProperty({
     required: false,
+    type: () => ItemListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => ItemListRelationFilter)
+  @IsOptional()
+  @Field(() => ItemListRelationFilter, {
+    nullable: true,
+  })
+  items?: ItemListRelationFilter;
+
+  @ApiProperty({
+    required: false,
     type: StringNullableFilter,
   })
   @Type(() => StringNullableFilter)
@@ -75,6 +91,42 @@ class UserWhereInput {
     nullable: true,
   })
   lastName?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => ListListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => ListListRelationFilter)
+  @IsOptional()
+  @Field(() => ListListRelationFilter, {
+    nullable: true,
+  })
+  lists?: ListListRelationFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => NoteListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => NoteListRelationFilter)
+  @IsOptional()
+  @Field(() => NoteListRelationFilter, {
+    nullable: true,
+  })
+  notes?: NoteListRelationFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => PostListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => PostListRelationFilter)
+  @IsOptional()
+  @Field(() => PostListRelationFilter, {
+    nullable: true,
+  })
+  posts?: PostListRelationFilter;
 
   @ApiProperty({
     required: false,

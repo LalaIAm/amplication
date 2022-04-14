@@ -25,6 +25,8 @@ import { DeleteHouseholdArgs } from "./DeleteHouseholdArgs";
 import { HouseholdFindManyArgs } from "./HouseholdFindManyArgs";
 import { HouseholdFindUniqueArgs } from "./HouseholdFindUniqueArgs";
 import { Household } from "./Household";
+import { ForumFindManyArgs } from "../../forum/base/ForumFindManyArgs";
+import { Forum } from "../../forum/base/Forum";
 import { HouseholdCalendarFindManyArgs } from "../../householdCalendar/base/HouseholdCalendarFindManyArgs";
 import { HouseholdCalendar } from "../../householdCalendar/base/HouseholdCalendar";
 import { UserFindManyArgs } from "../../user/base/UserFindManyArgs";
@@ -206,6 +208,32 @@ export class HouseholdResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => [Forum])
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "read",
+    possession: "any",
+  })
+  async forums(
+    @graphql.Parent() parent: Household,
+    @graphql.Args() args: ForumFindManyArgs,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<Forum[]> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Forum",
+    });
+    const results = await this.service.findForums(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results.map((result) => permission.filter(result));
   }
 
   @graphql.ResolveField(() => [HouseholdCalendar])

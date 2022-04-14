@@ -10,7 +10,13 @@ https://docs.amplication.com/docs/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "nestjs-prisma";
-import { Prisma, Household, HouseholdCalendar, User } from "@prisma/client";
+import {
+  Prisma,
+  Household,
+  Forum,
+  HouseholdCalendar,
+  User,
+} from "@prisma/client";
 
 export class HouseholdServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -45,6 +51,17 @@ export class HouseholdServiceBase {
     args: Prisma.SelectSubset<T, Prisma.HouseholdDeleteArgs>
   ): Promise<Household> {
     return this.prisma.household.delete(args);
+  }
+
+  async findForums(
+    parentId: string,
+    args: Prisma.ForumFindManyArgs
+  ): Promise<Forum[]> {
+    return this.prisma.household
+      .findUnique({
+        where: { id: parentId },
+      })
+      .forums(args);
   }
 
   async findHouseholdCalendars(

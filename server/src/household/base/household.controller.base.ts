@@ -27,6 +27,10 @@ import { HouseholdWhereUniqueInput } from "./HouseholdWhereUniqueInput";
 import { HouseholdFindManyArgs } from "./HouseholdFindManyArgs";
 import { HouseholdUpdateInput } from "./HouseholdUpdateInput";
 import { Household } from "./Household";
+import { Post } from "../../post/base/Post";
+import { ForumFindManyArgs } from "../../forum/base/ForumFindManyArgs";
+import { Forum } from "../../forum/base/Forum";
+import { ForumWhereUniqueInput } from "../../forum/base/ForumWhereUniqueInput";
 import { HouseholdCalendarFindManyArgs } from "../../householdCalendar/base/HouseholdCalendarFindManyArgs";
 import { HouseholdCalendar } from "../../householdCalendar/base/HouseholdCalendar";
 import { HouseholdCalendarWhereUniqueInput } from "../../householdCalendar/base/HouseholdCalendarWhereUniqueInput";
@@ -259,6 +263,189 @@ export class HouseholdControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Get("/:id/forums")
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "read",
+    possession: "any",
+  })
+  @ApiNestedQuery(ForumFindManyArgs)
+  async findManyForums(
+    @common.Req() request: Request,
+    @common.Param() params: HouseholdWhereUniqueInput,
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<Forum[]> {
+    const query = plainToClass(ForumFindManyArgs, request.query);
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Forum",
+    });
+    const results = await this.service.findForums(params.id, {
+      ...query,
+      select: {
+        createdAt: true,
+
+        household: {
+          select: {
+            id: true,
+          },
+        },
+
+        id: true,
+        topic: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results.map((result) => permission.filter(result));
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Post("/:id/forums")
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "update",
+    possession: "any",
+  })
+  async createForums(
+    @common.Param() params: HouseholdWhereUniqueInput,
+    @common.Body() body: HouseholdWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      forums: {
+        connect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "Household",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"Household"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Patch("/:id/forums")
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "update",
+    possession: "any",
+  })
+  async updateForums(
+    @common.Param() params: HouseholdWhereUniqueInput,
+    @common.Body() body: ForumWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      forums: {
+        set: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "Household",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"Household"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Delete("/:id/forums")
+  @nestAccessControl.UseRoles({
+    resource: "Household",
+    action: "update",
+    possession: "any",
+  })
+  async deleteForums(
+    @common.Param() params: HouseholdWhereUniqueInput,
+    @common.Body() body: HouseholdWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      forums: {
+        disconnect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "Household",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"Household"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 
   @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
