@@ -13,6 +13,7 @@ import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsOptional, IsDate, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
+import { Event } from "../../event/base/Event";
 import { Household } from "../../household/base/Household";
 @ObjectType()
 class User {
@@ -45,6 +46,15 @@ class User {
   @Type(() => Date)
   @Field(() => Date)
   createdAt!: Date;
+
+  @ApiProperty({
+    required: false,
+    type: () => [Event],
+  })
+  @ValidateNested()
+  @Type(() => Event)
+  @IsOptional()
+  event?: Array<Event>;
 
   @ApiProperty({
     required: false,
